@@ -57,6 +57,11 @@ class LEClient
 	const LOG_DEBUG = 2;	// Logs messages, faults and raw responses from HTTP requests.
 
     /**
+     * @var string
+     */
+    private $baseURL;
+
+    /**
      * Initiates the LetsEncrypt main client.
      *
      * @param array		$email	 			The array of strings containing e-mail addresses. Only used in this function when creating a new account.

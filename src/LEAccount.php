@@ -133,7 +133,7 @@ class LEAccount
 		{
 			$this->id = isset($post['body']['id']) ? $post['body']['id'] : '';
 			$this->key = $post['body']['key'];
-			$this->contact = $post['body']['contact'];
+			$this->contact = $post['body']['contact'] ?? 'noreply@localhost.tld';
 			$this->agreement = isset($post['body']['agreement']) ? $post['body']['agreement'] : '';			
 			$this->createdAt = $post['body']['createdAt'];
 			$this->status = $post['body']['status'];
@@ -161,7 +161,7 @@ class LEAccount
 		{
 			$this->id = isset($post['body']['id']) ? $post['body']['id'] : '';
 			$this->key = $post['body']['key'];
-			$this->contact = $post['body']['contact'];
+			$this->contact = $post['body']['contact'] ?? 'noreply@localhost.tld';
 			$this->agreement = isset($post['body']['agreement']) ? $post['body']['agreement'] : '';			
 			$this->createdAt = $post['body']['createdAt'];
 			$this->status = $post['body']['status'];

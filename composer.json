@@ -1,5 +1,5 @@
 {
-    "name": "nfacha/leclient",
+    "name": "yourivw/leclient",
     "type": "library",
     "description": "PHP LetsEncrypt client library for ACME v2",
     "license": "MIT",

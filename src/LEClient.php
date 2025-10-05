@@ -62,17 +62,17 @@ class LEClient
     private $baseURL;
 
     /**
-     * Initiates the LetsEncrypt main client.
-     *
-     * @param array		$email	 			The array of strings containing e-mail addresses. Only used in this function when creating a new account.
-     * @param boolean	$acmeURL			ACME URL, can be string or one of predefined values: LE_STAGING or LE_PRODUCTION. Defaults to LE_STAGING.
-     * @param int 		$log				The level of logging. Defaults to no logging. LOG_OFF, LOG_STATUS, LOG_DEBUG accepted. Defaults to LOG_OFF. (optional)
-     * @param string 	$certificateKeys 	The main directory in which all keys (and certificates), including account keys, are stored. Defaults to 'keys/'. (optional)
-     * @param array 	$certificateKeys 	Optional array containing location of all certificate files. Required paths are public_key, private_key, order and certificate/fullchain_certificate (you can use both or only one of them)
-     * @param string 	$accountKeys 		The directory in which the account keys are stored. Is a subdir inside $certificateKeys. Defaults to '__account/'.(optional)
-     * @param array 	$accountKeys 		Optional array containing location of account private and public keys. Required paths are private_key, public_key.
-	 * @param string    $sourceIp           Optional source IP address.
-     */
+	 * Initiates the LetsEncrypt main client.
+	 *
+	 * @param array              $email              The array of strings containing e-mail addresses. Only used in this function when creating a new account.
+	 * @param boolean|string     $acmeURL            ACME URL, can be string or one of predefined values: LE_STAGING or LE_PRODUCTION. Defaults to LE_STAGING.
+	 * @param int                $log                The level of logging. Defaults to no logging. LOG_OFF, LOG_STATUS, LOG_DEBUG accepted. Defaults to LOG_OFF. (optional)
+	 * @param string|array       $certificateKeys    The main directory in which all keys (and certificates), including account keys, are stored. Defaults to 'keys/'. 
+	 *                                               Can also be an array containing location of all certificate files. Required array keys: public_key, private_key, order, and certificate/fullchain_certificate. (optional)
+	 * @param string|array       $accountKeys        The directory in which the account keys are stored. Is a subdir inside $certificateKeys. Defaults to '__account/'. 
+	 *                                               Can also be an array containing location of account private and public keys. Required array keys: private_key, public_key. (optional)
+	 * @param string|null        $sourceIp           Optional source IP address. (optional)
+	 */
 	public function __construct($email, $acmeURL = LEClient::LE_PRODUCTION, $log = LEClient::LOG_OFF, $certificateKeys = 'keys/', $accountKeys = '__account/', $sourceIp = false)
 	{
 		$this->log = $log;

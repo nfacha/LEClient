@@ -317,14 +317,14 @@ class LEOrder
     /**
      * Get the requested LetsEncrypt Authorization instances and returns the data. The data in the return object depends on the $type.
      *
-     * @param int	$type	The type of verification to get. Supporting http-01 and dns-01. Supporting LEOrder::CHALLENGE_TYPE_HTTP and LEOrder::CHALLENGE_TYPE_DNS. Throws
-     *						a Runtime Exception when requesting an unknown $type. Keep in mind a wildcard domain authorization only accepts LEOrder::CHALLENGE_TYPE_DNS.
-     * @param string $authStatus The status of the authorization.
+     * @param string $type           The type of verification to get. Supporting http-01 and dns-01. Use LEOrder::CHALLENGE_TYPE_HTTP or LEOrder::CHALLENGE_TYPE_DNS. Throws
+     *                               a Runtime Exception when requesting an unknown $type. Keep in mind a wildcard domain authorization only accepts LEOrder::CHALLENGE_TYPE_DNS.
+     * @param string $authStatus     The status of the authorization.
      * @param string $challengeStatus The status of the challenge.
      *
-     * @return object	Returns an array with verification data if successful, false if not pending LetsEncrypt Authorization instances were found. The return array always
-     *					contains 'type' and 'identifier'. For LEOrder::CHALLENGE_TYPE_HTTP, the array contains 'filename' and 'content' for necessary the authorization file.
-     *					For LEOrder::CHALLENGE_TYPE_DNS, the array contains 'DNSDigest', which is the content for the necessary DNS TXT entry.
+     * @return array|false           Returns an array with verification data if successful, false if no pending LetsEncrypt Authorization instances were found. The return array always
+     *                               contains 'type' and 'identifier'. For LEOrder::CHALLENGE_TYPE_HTTP, the array contains 'filename' and 'content' for the necessary authorization file.
+     *                               For LEOrder::CHALLENGE_TYPE_DNS, the array contains 'DNSDigest', which is the content for the necessary DNS TXT entry.
      */
 
 	public function getAuthorizations($type, $authStatus, $challengeStatus)
@@ -374,12 +374,12 @@ class LEOrder
     /**
      * Get all pending LetsEncrypt Authorization instances and return the necessary data for verification. The data in the return object depends on the $type.
      *
-     * @param int	$type	The type of verification to get. Supporting http-01 and dns-01. Supporting LEOrder::CHALLENGE_TYPE_HTTP and LEOrder::CHALLENGE_TYPE_DNS. Throws
-     *						a Runtime Exception when requesting an unknown $type. Keep in mind a wildcard domain authorization only accepts LEOrder::CHALLENGE_TYPE_DNS.
+     * @param string $type  The type of verification to get. Supporting http-01 and dns-01. Use LEOrder::CHALLENGE_TYPE_HTTP or LEOrder::CHALLENGE_TYPE_DNS. Throws
+     *                      a Runtime Exception when requesting an unknown $type. Keep in mind a wildcard domain authorization only accepts LEOrder::CHALLENGE_TYPE_DNS.
      *
-     * @return object	Returns an array with verification data if successful, false if not pending LetsEncrypt Authorization instances were found. The return array always
-     *					contains 'type' and 'identifier'. For LEOrder::CHALLENGE_TYPE_HTTP, the array contains 'filename' and 'content' for necessary the authorization file.
-     *					For LEOrder::CHALLENGE_TYPE_DNS, the array contains 'DNSDigest', which is the content for the necessary DNS TXT entry.
+     * @return array|false       Returns an array with verification data if successful, false if no pending LetsEncrypt Authorization instances were found. The return array always
+     *                      contains 'type' and 'identifier'. For LEOrder::CHALLENGE_TYPE_HTTP, the array contains 'filename' and 'content' for the necessary authorization file.
+     *                      For LEOrder::CHALLENGE_TYPE_DNS, the array contains 'DNSDigest', which is the content for the necessary DNS TXT entry.
      */
     public function getPendingAuthorizations($type)
     {
@@ -392,7 +392,7 @@ class LEOrder
       * @param int	$type	The type of verification to get. Supporting http-01 and dns-01. Supporting LEOrder::CHALLENGE_TYPE_HTTP and LEOrder::CHALLENGE_TYPE_DNS. Throws
       *						a Runtime Exception when requesting an unknown $type. Keep in mind a wildcard domain authorization only accepts LEOrder::CHALLENGE_TYPE_DNS.
       *
-      * @return object	Returns an array with verification data if successful, false if not pending LetsEncrypt Authorization instances were found. The return array always
+      * @return array|false    Returns an array with verification data if successful, false if not pending LetsEncrypt Authorization instances were found. The return array always
       *					contains 'type' and 'identifier'. For LEOrder::CHALLENGE_TYPE_HTTP, the array contains 'filename' and 'content' for necessary the authorization file.
       *					For LEOrder::CHALLENGE_TYPE_DNS, the array contains 'DNSDigest', which is the content for the necessary DNS TXT entry.
       */
@@ -405,11 +405,11 @@ class LEOrder
      * Sends a verification request for a given $identifier and $type. The function itself checks whether the verification is valid before making the request.
      * Updates the LetsEncrypt Authorization instances after a successful verification.
      *
-     * @param string	$identifier	The domain name to verify.
-     * @param int 		$type 		The type of verification. Supporting LEOrder::CHALLENGE_TYPE_HTTP and LEOrder::CHALLENGE_TYPE_DNS.
-     * @param boolean	$localcheck	Whether to verify the authorization locally before making the authorization request to LE. Optional, default to true.
+     * @param string  $identifier The domain name to verify.
+     * @param string  $type       The type of verification. Use LEOrder::CHALLENGE_TYPE_HTTP or LEOrder::CHALLENGE_TYPE_DNS.
+     * @param boolean $localcheck Whether to verify the authorization locally before making the authorization request to LE. Optional, default to true.
      *
-     * @return boolean	Returns true when the verification request was successful, false if not.
+     * @return boolean            Returns true when the verification request was successful, false if not.
      */
     public function verifyPendingOrderAuthorization($identifier, $type, $localcheck = true)
     {
@@ -820,7 +820,7 @@ class LEOrder
     }
 
     /**
-     * @param $certificates
+     * @param array $certificates
      *
      * @return bool
      */

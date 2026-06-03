@@ -694,10 +694,14 @@ class LEOrder
                     return false;
                 }
                 if (isset($preferredChain)) {
-                    $parsedIntermediate = openssl_x509_parse($certificates['intermediate']);
                     $headers = str_replace("\r\n", "\n", $post['header']);
-                    if(isset($parsedIntermediate['issuer']['CN'])
-                        && $preferredChain !== $parsedIntermediate['issuer']['CN']) {
+
+                    preg_match_all('~(-----BEGIN\sCERTIFICATE-----[\s\S]+?-----END\sCERTIFICATE-----)~i', $certificates['intermediate'], $chainMatches);
+                    $lastCertInChain = end($chainMatches[0]);
+                    $parsedRoot = openssl_x509_parse($lastCertInChain);
+                    $rootCN = isset($parsedRoot['subject']['CN']) ? $parsedRoot['subject']['CN'] : (isset($parsedRoot['issuer']['CN']) ? $parsedRoot['issuer']['CN'] : '');
+
+                    if($preferredChain !== $rootCN) {
                         preg_match_all('~^link:\s<(.+)>;rel="alternate"$~mi', $headers, $matches);
 
                         if (isset($matches[1]) && count($links = $matches[1]) > 0) {
@@ -706,8 +710,12 @@ class LEOrder
 
                                 $alternativeCertResponse = $this->postCertificateRequest($link);
                                 $alternativeCertificate = $this->validateCertificateResponse($alternativeCertResponse);
-                                $parsedIntermediate = openssl_x509_parse($alternativeCertificate['intermediate']);
-                                if (isset($parsedIntermediate['issuer']['CN']) && $preferredChain === $parsedIntermediate['issuer']['CN']) {
+
+                                preg_match_all('~(-----BEGIN\sCERTIFICATE-----[\s\S]+?-----END\sCERTIFICATE-----)~i', $alternativeCertificate['intermediate'], $altMatches);
+                                $altRoot = openssl_x509_parse(end($altMatches[0]));
+                                $altRootCN = isset($altRoot['subject']['CN']) ? $altRoot['subject']['CN'] : (isset($altRoot['issuer']['CN']) ? $altRoot['issuer']['CN'] : '');
+
+                                if ($preferredChain === $altRootCN) {
                                     $certificates = $alternativeCertificate;
                                     $preferredChainFound = true;
                                     break;
@@ -844,10 +852,14 @@ class LEOrder
         {
             if(preg_match_all('~(-----BEGIN\sCERTIFICATE-----[\s\S]+?-----END\sCERTIFICATE-----)~i', $response['body'], $matches))
             {
-                return [
-                    'leaf' => $matches[0][0],
-                    'intermediate' => $matches[0][1],
+                $result = [
+                    'leaf' => $matches[0][0]
                 ];
+
+                $chain = array_slice($matches[0], 1);
+                $result['intermediate'] = implode("\n", $chain);
+
+                return $result;
             }
             else
             {
